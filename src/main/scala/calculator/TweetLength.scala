@@ -1,14 +1,25 @@
 package calculator
 
+import sun.reflect.generics.scope.Scope
+
 object TweetLength extends TweetLengthInterface {
   final val MaxTweetLength = 140
+  private final val charsLeftThreshold = 15
+  private final val greenText = "green"
+  private final val orangeText = "orange"
+  private final val redText = "red"
 
   def tweetRemainingCharsCount(tweetText: Signal[String]): Signal[Int] = {
-    ???
+    Signal(MaxTweetLength - tweetLength(tweetText()))
   }
 
   def colorForRemainingCharsCount(remainingCharsCount: Signal[Int]): Signal[String] = {
-    ???
+    def colorSignal(charsLeft: Int): String = {
+      if (charsLeft >= charsLeftThreshold) greenText
+      else if (charsLeft >= 0) orangeText
+      else redText
+    }
+    Signal(colorSignal(remainingCharsCount()))
   }
 
   /** Computes the length of a tweet, given its text string.
